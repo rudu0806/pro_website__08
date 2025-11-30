@@ -682,10 +682,8 @@
                 <p>Drag and drop your resume here or click to browse</p>
                 <p style="font-size: 0.9em; color: #999;">Supports PDF, DOC, DOCX, TXT (Max 5MB)</p>
                 <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt"
-                    onchange="handleFileUpload(event)">
+                    onchange="(function(e){ const file = e.target.files[0]; if(!file) return; if(file.size > 5 * 1024 * 1024){ alert('File size must be less than 5MB'); return; } const reader = new FileReader(); reader.onload = function(ev){ document.getElementById('resumeText').value = ev.target.result; alert('File uploaded successfully! Click Analyze Resume to continue.'); }; reader.readAsText(file); })(event)">
             </div>
-
-            <div class="text-input-section">
                 <h3>Or Paste Your Resume Text Below</h3>
                 <textarea id="resumeText" placeholder="Paste your resume content here...
 
@@ -706,8 +704,7 @@ University Name, 2018
 
 SKILLS
 JavaScript, Python, React, Node.js"></textarea>
-                <button class="btn" onclick="analyzeResume()" style="margin-top: 20px; width: 100%;">🚀 Analyze
-                    Resume</button>
+                <button class="btn" onclick="analyzeResume()" style="margin-top: 20px; width: 100%;">🚀 Analyze Resume</button>
             </div>
         </div>
 
@@ -921,4 +918,216 @@ JavaScript, Python, React, Node.js"></textarea>
             const keywords = ['led', 'managed', 'developed', 'improved', 'created', 'achieved', 'implemented'];
             const keywordCount = keywords.filter(kw => text.includes(kw)).length;
             const keywordsScore = Math.min(10, keywordCount + 4);
-            updateCard('keywords', keywordsScore, generateKeywordsAnalysis(keywordCount))};
+            updateCard('keywords', keywordsScore, generateKeywordsAnalysis(keywordCount));
+
+            // Length Analysis
+            const lengthScore = wordCount > 250 && wordCount < 600 ? Math.floor(Math.random() * 2) + 8 : Math.floor(Math.random() * 3) + 5;
+            updateCard('length', lengthScore, generateLengthAnalysis(wordCount));
+
+            // Calculate overall score
+            const overallScore = Math.round((experienceScore + educationScore + skillsScore + formatScore + keywordsScore + lengthScore) / 6);
+            document.getElementById('scoreValue').textContent = overallScore;
+
+            // Generate suggestions
+            generateSuggestions(text, overallScore);
+        }
+
+        function updateCard(category, score, content) {
+            const scorePercent = (score / 10) * 100;
+            document.getElementById(category + 'Content').innerHTML = content;
+            document.getElementById(category + 'Rating').style.width = scorePercent + '%';
+            document.getElementById(category + 'Score').textContent = score + '/10';
+        }
+
+        function generateExperienceAnalysis(text, hasExperience) {
+            if (hasExperience) {
+                return `<ul>
+                    <li>Clear work experience section found</li>
+                    <li>Multiple roles and responsibilities listed</li>
+                    <li>Consider adding more quantifiable achievements</li>
+                </ul>`;
+            }
+            return `<ul>
+                <li class="error">No experience section detected</li>
+                <li>Add a dedicated Experience/Work History section</li>
+                <li>Include job titles, companies, and dates</li>
+            </ul>`;
+        }
+
+        function generateEducationAnalysis(text, hasEducation) {
+            if (hasEducation) {
+                return `<ul>
+                    <li>Education section is present</li>
+                    <li>Degree information clearly stated</li>
+                    <li>Consider adding graduation date or GPA if strong</li>
+                </ul>`;
+            }
+            return `<ul>
+                <li class="error">Education section missing or unclear</li>
+                <li>Add your degree and institution name</li>
+                <li>Include graduation year or expected graduation date</li>
+            </ul>`;
+        }
+
+        function generateSkillsAnalysis(text, hasSkills) {
+            if (hasSkills) {
+                return `<ul>
+                    <li>Skills section is well-organized</li>
+                    <li>Technical and soft skills mentioned</li>
+                    <li>Consider grouping skills by category</li>
+                </ul>`;
+            }
+            return `<ul>
+                <li class="error">No dedicated skills section found</li>
+                <li>Create a clear Skills or Technical Skills section</li>
+                <li>List relevant tools, languages, and competencies</li>
+            </ul>`;
+        }
+
+        function generateFormatAnalysis(hasStructure) {
+            if (hasStructure) {
+                return `<ul>
+                    <li>Resume has proper structure</li>
+                    <li>All major sections are included</li>
+                    <li>Layout is easy to scan and professional</li>
+                </ul>`;
+            }
+            return `<ul>
+                <li class="error">Resume structure needs improvement</li>
+                <li>Ensure clear section headers</li>
+                <li>Use consistent formatting throughout</li>
+            </ul>`;
+        }
+
+        function generateKeywordsAnalysis(keywordCount) {
+            if (keywordCount >= 5) {
+                return `<ul>
+                    <li>Strong action verbs used (${keywordCount} found)</li>
+                    <li>Impressive language evident</li>
+                    <li>Achievements are clearly highlighted</li>
+                </ul>`;
+            }
+            return `<ul>
+                <li class="error">Limited action verbs (${keywordCount} found)</li>
+                <li>Use words like: led, managed, developed, improved</li>
+                <li>Replace passive phrases with strong verbs</li>
+            </ul>`;
+        }
+
+        function generateLengthAnalysis(wordCount) {
+            if (wordCount > 250 && wordCount < 600) {
+                return `<ul>
+                    <li>Optimal resume length (${wordCount} words)</li>
+                    <li>Concise yet comprehensive</li>
+                    <li>Easy for recruiters to scan</li>
+                </ul>`;
+            } else if (wordCount < 250) {
+                return `<ul>
+                    <li class="error">Resume is too short (${wordCount} words)</li>
+                    <li>Add more details about your experience</li>
+                    <li>Expand education and skills sections</li>
+                </ul>`;
+            } else {
+                return `<ul>
+                    <li class="error">Resume is too long (${wordCount} words)</li>
+                    <li>Remove unnecessary details</li>
+                    <li>Focus on most relevant accomplishments</li>
+                </ul>`;
+            }
+        }
+
+        function generateSuggestions(text, score) {
+            const suggestions = [];
+
+            if (!text.includes('experience')) {
+                suggestions.push({
+                    title: 'Add Work Experience Section',
+                    text: 'Include your professional background with dates, job titles, and key accomplishments.'
+                });
+            }
+
+            if (!text.includes('education')) {
+                suggestions.push({
+                    title: 'Include Education Details',
+                    text: 'List your degrees, institutions, and graduation dates to establish credibility.'
+                });
+            }
+
+            if (!text.includes('skills')) {
+                suggestions.push({
+                    title: 'Create a Skills Section',
+                    text: 'Highlight technical and professional skills relevant to your target position.'
+                });
+            }
+
+            if (text.split(/\s+/).length < 250) {
+                suggestions.push({
+                    title: 'Expand Your Resume',
+                    text: 'Add more detail to each section. Aim for 250-600 words total.'
+                });
+            }
+
+            const actionVerbs = ['led', 'managed', 'developed', 'improved', 'created'];
+            const usedVerbs = actionVerbs.filter(v => text.includes(v)).length;
+            if (usedVerbs < 3) {
+                suggestions.push({
+                    title: 'Use Strong Action Verbs',
+                    text: 'Replace passive language with powerful verbs like "led," "managed," and "developed" to showcase impact.'
+                });
+            }
+
+            if (score < 70) {
+                suggestions.push({
+                    title: 'Review Overall Structure',
+                    text: 'Ensure your resume has a clear, logical flow with proper headings and spacing.'
+                });
+            }
+
+            if (suggestions.length === 0) {
+                suggestions.push({
+                    title: 'Great Resume!',
+                    text: 'Your resume looks comprehensive and well-structured. Keep it updated with your latest achievements.'
+                });
+            }
+
+            const suggestionsHTML = suggestions.map(s => `
+                <div class="suggestion-item">
+                    <div class="suggestion-title">${s.title}</div>
+                    <div class="suggestion-text">${s.text}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('suggestionsContent').innerHTML = suggestionsHTML;
+        }
+
+        function animateScore() {
+            const scoreValue = parseInt(document.getElementById('scoreValue').textContent);
+            const scoreCircle = document.getElementById('scoreCircle');
+            const circumference = 2 * Math.PI * 110;
+
+            let currentScore = 0;
+            const increment = Math.ceil(scoreValue / 50);
+            const interval = setInterval(() => {
+                currentScore += increment;
+                if (currentScore >= scoreValue) {
+                    currentScore = scoreValue;
+                    clearInterval(interval);
+                }
+                const offset = circumference - (currentScore / 100) * circumference;
+                scoreCircle.style.strokeDashoffset = offset;
+            }, 20);
+        }
+
+        function resetReview() {
+            document.getElementById('uploadSection').style.display = 'block';
+            document.getElementById('analysisSection').classList.remove('active');
+            document.getElementById('loadingSection').classList.remove('active');
+            document.getElementById('resumeText').value = '';
+            resumeContent = '';
+            document.getElementById('fileInput').value = '';
+        }
+
+        function showExamples() {
+            alert('Example Resume:\n\nJohn Doe\nSoftware Engineer\n\nEXPERIENCE\nSenior Developer at Tech Corp (2020-Present)\n- Led team of 5 developers\n- Developed scalable applications\n- Improved performance by 40%\n\nEDUCATION\nB.S. Computer Science\nUniversity Name, 2018\n\nSKILLS\nJavaScript, Python, React, Node.js, AWS');
+        }
+    </script>
