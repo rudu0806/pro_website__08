@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -70,25 +71,59 @@
         }
 
         @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(50px, -50px) scale(1.1); }
-            50% { transform: translate(-30px, 30px) scale(0.9); }
-            75% { transform: translate(30px, 50px) scale(1.05); }
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(50px, -50px) scale(1.1);
+            }
+
+            50% {
+                transform: translate(-30px, 30px) scale(0.9);
+            }
+
+            75% {
+                transform: translate(30px, 50px) scale(1.05);
+            }
         }
 
         @keyframes slideDown {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .container {
@@ -544,8 +579,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .loading-text {
@@ -559,7 +599,7 @@
             .hero h2 {
                 font-size: 2.5em;
             }
-            
+
             .hero p {
                 font-size: 1.1em;
             }
@@ -589,6 +629,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="bg-shapes">
         <div class="shape shape1"></div>
@@ -615,8 +656,9 @@
 
         <section class="hero">
             <h2>Transform Your Resume</h2>
-            <p>Get instant AI-powered feedback on your resume with detailed analysis, scoring, and actionable suggestions to land your dream job.</p>
-            
+            <p>Get instant AI-powered feedback on your resume with detailed analysis, scoring, and actionable
+                suggestions to land your dream job.</p>
+
             <div class="hero-stats">
                 <div class="stat-item">
                     <div class="stat-number">50K+</div>
@@ -639,7 +681,8 @@
                 <h3>Upload Your Resume</h3>
                 <p>Drag and drop your resume here or click to browse</p>
                 <p style="font-size: 0.9em; color: #999;">Supports PDF, DOC, DOCX, TXT (Max 5MB)</p>
-                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt" onchange="handleFileUpload(event)">
+                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.txt"
+                    onchange="handleFileUpload(event)">
             </div>
 
             <div class="text-input-section">
@@ -663,7 +706,8 @@ University Name, 2018
 
 SKILLS
 JavaScript, Python, React, Node.js"></textarea>
-                <button class="btn" onclick="analyzeResume()" style="margin-top: 20px; width: 100%;">🚀 Analyze Resume</button>
+                <button class="btn" onclick="analyzeResume()" style="margin-top: 20px; width: 100%;">🚀 Analyze
+                    Resume</button>
             </div>
         </div>
 
@@ -678,8 +722,9 @@ JavaScript, Python, React, Node.js"></textarea>
                 <h2 style="font-size: 2em; color: #333; margin-bottom: 30px;">Your Resume Score</h2>
                 <div class="score-circle">
                     <svg width="250" height="250">
-                        <circle cx="125" cy="125" r="110" stroke="#e0e0e0" stroke-width="20" fill="none"/>
-                        <circle id="scoreCircle" cx="125" cy="125" r="110" stroke="url(#gradient)" stroke-width="20" fill="none" stroke-dasharray="691" stroke-dashoffset="691" stroke-linecap="round"/>
+                        <circle cx="125" cy="125" r="110" stroke="#e0e0e0" stroke-width="20" fill="none" />
+                        <circle id="scoreCircle" cx="125" cy="125" r="110" stroke="url(#gradient)" stroke-width="20"
+                            fill="none" stroke-dasharray="691" stroke-dashoffset="691" stroke-linecap="round" />
                         <defs>
                             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
@@ -814,7 +859,7 @@ JavaScript, Python, React, Node.js"></textarea>
             }
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 resumeContent = e.target.result;
                 document.getElementById('resumeText').value = resumeContent;
                 alert('File uploaded successfully! Click "Analyze Resume" to continue.');
@@ -824,7 +869,7 @@ JavaScript, Python, React, Node.js"></textarea>
 
         function analyzeResume() {
             resumeContent = document.getElementById('resumeText').value.trim();
-            
+
             if (!resumeContent) {
                 alert('Please upload a resume or paste your resume text.');
                 return;
@@ -851,7 +896,7 @@ JavaScript, Python, React, Node.js"></textarea>
         function performAnalysis() {
             const text = resumeContent.toLowerCase();
             const wordCount = resumeContent.split(/\s+/).length;
-            
+
             // Experience Analysis
             const hasExperience = text.includes('experience') || text.includes('work') || text.includes('employment');
             const experienceScore = hasExperience ? Math.floor(Math.random() * 3) + 7 : Math.floor(Math.random() * 3) + 4;
@@ -876,4 +921,4 @@ JavaScript, Python, React, Node.js"></textarea>
             const keywords = ['led', 'managed', 'developed', 'improved', 'created', 'achieved', 'implemented'];
             const keywordCount = keywords.filter(kw => text.includes(kw)).length;
             const keywordsScore = Math.min(10, keywordCount + 4);
-            updateCard('keywords', keywordsScore, generateKeywordsAnalysis(keywordCount));
+            updateCard('keywords', keywordsScore, generateKeywordsAnalysis(keywordCount))};
